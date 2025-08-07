@@ -80,7 +80,7 @@ export function AddFriendsModal({ isOpen, onClose }: AddFriendsModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md mx-auto">
+      <DialogContent className="max-w-md mx-auto max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-gray-900 dark:text-gray-100 text-center">
             Add Friends
@@ -176,15 +176,16 @@ export function AddFriendsModal({ isOpen, onClose }: AddFriendsModalProps) {
               </div>
               
               <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <code className="text-xs text-gray-600 dark:text-gray-400 truncate flex-1 mr-2">
+                <div className="flex items-center gap-2">
+                  <code className="text-xs text-gray-600 dark:text-gray-400 break-all flex-1 min-w-0">
                     {window.location.origin}/invite/{user?.id}
                   </code>
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={copyInviteLink}
-                    className="p-1"
+                    className="p-2 shrink-0"
+                    title={copied ? "Copied!" : "Copy invite link"}
                   >
                     {copied ? <Check size={16} /> : <Copy size={16} />}
                   </Button>
