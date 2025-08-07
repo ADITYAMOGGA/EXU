@@ -1,6 +1,13 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client
+const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
+
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Sync user data when they sign in (creates user in local storage)
@@ -32,7 +39,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // User search endpoint
+  // User search endpoint - Query Supabase directly
   app.get("/api/users/search", async (req, res) => {
     try {
       const { q } = req.query;
@@ -40,9 +47,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!q || typeof q !== 'string') {
         return res.status(400).json({ message: "Search query is required" });
       }
+
+      const searchTerm = q.toLowerCase().trim();
       
-      const users = await storage.searchUsers(q.toLowerCase().trim());
-      res.json(users);
+      // Query Supabase users table directly
+      const { data: users, error } = await supabase
+        .from('users')
+        .select('id, email, full_name, avatar_url, is_online, created_at, last_seen')
+        .or(`email.ilike.%${searchTerm}%,full_name.ilike.%${searchTerm}%`)
+        .limit(10);
+
+      if (error) {
+        console.error("Supabase search error:", error);
+        return res.status(500).json({ message: "Search failed" });
+      }
+
+      // Transform to match our User interface
+      const transformedUsers = users?.map(user => ({
+        id: user.id,
+        email: user.email,
+        fullName: user.full_name,
+        avatarUrl: user.avatar_url,
+        isOnline: user.is_online || false,
+        createdAt: new Date(user.created_at),
+        lastSeen: new Date(user.last_seen || user.created_at)
+      })) || [];
+
+      res.json(transformedUsers);
     } catch (error) {
       console.error("Search error:", error);
       res.status(500).json({ message: "Search failed" });
