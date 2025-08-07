@@ -48,10 +48,21 @@ export class MemStorage implements IStorage {
   }
 
   async searchUsers(query: string): Promise<User[]> {
-    return Array.from(this.users.values()).filter(user => 
-      user.email.toLowerCase().includes(query) || 
-      user.fullName.toLowerCase().includes(query)
-    );
+    const searchTerm = query.toLowerCase().trim();
+    return Array.from(this.users.values()).filter(user => {
+      const email = user.email.toLowerCase();
+      const fullName = user.fullName.toLowerCase();
+      const firstName = fullName.split(' ')[0];
+      const lastName = fullName.split(' ').slice(1).join(' ');
+      
+      return email.includes(searchTerm) || 
+             fullName.includes(searchTerm) ||
+             firstName.includes(searchTerm) ||
+             lastName.includes(searchTerm) ||
+             email.startsWith(searchTerm) ||
+             fullName.startsWith(searchTerm) ||
+             firstName.startsWith(searchTerm);
+    });
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {

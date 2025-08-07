@@ -44,8 +44,12 @@ export function AddFriendsModal({ isOpen, onClose }: AddFriendsModalProps) {
       const users = await response.json();
       console.log('Search results:', users);
       
-      // Filter out current user if they exist in results
-      const filteredUsers = Array.isArray(users) ? users.filter((u: any) => u.id !== user?.id) : [];
+      // Filter out current user and test users, keep only real accounts
+      const filteredUsers = Array.isArray(users) ? users.filter((u: any) => 
+        u.id !== user?.id && 
+        !u.id.startsWith('test-user-') &&
+        !u.email.includes('@example.com')
+      ) : [];
       setSearchResults(filteredUsers);
       
     } catch (error) {
