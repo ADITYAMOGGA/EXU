@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Landing from "@/pages/Landing";
 import Chat from "@/pages/Chat";
 import Profile from "@/pages/Profile";
+import Invite from "@/pages/Invite";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -15,6 +16,7 @@ function Router() {
       <Route path="/" component={Landing} />
       <Route path="/chat" component={Chat} />
       <Route path="/profile" component={Profile} />
+      <Route path="/invite/:userId" component={Invite} />
       <Route component={NotFound} />
     </Switch>
   );
