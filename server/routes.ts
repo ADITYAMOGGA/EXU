@@ -3,50 +3,32 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Check if user is authorized to login (must exist in database)
-  app.post("/api/users/authorize", async (req, res) => {
+  // Sync user data when they sign in (creates user in local storage)
+  app.post("/api/users/sync", async (req, res) => {
     try {
-      const { email } = req.body;
+      const { id, email, fullName, avatarUrl } = req.body;
       
-      if (!email) {
-        return res.status(400).json({ message: "Email is required" });
+      if (!id || !email || !fullName) {
+        return res.status(400).json({ message: "User ID, email, and fullName are required" });
       }
       
-      // Check if user exists in our database by email
-      const user = await storage.getUserByEmail(email.toLowerCase().trim());
+      // Check if user already exists
+      let user = await storage.getUserById(id);
       
       if (!user) {
-        return res.status(403).json({ 
-          message: "Access denied. You must be pre-approved to use this application." 
+        // Create new user in local storage
+        user = await storage.createUserWithId({
+          id,
+          email,
+          fullName,
+          avatarUrl: avatarUrl || null
         });
       }
       
-      res.json({ authorized: true, user });
-    } catch (error) {
-      console.error("User authorization error:", error);
-      res.status(500).json({ message: "Failed to authorize user" });
-    }
-  });
-
-  // Add pre-approved users endpoint (for admin use)
-  app.post("/api/users/add", async (req, res) => {
-    try {
-      const { email, fullName, avatarUrl } = req.body;
-      
-      if (!email || !fullName) {
-        return res.status(400).json({ message: "Email and fullName are required" });
-      }
-      
-      const user = await storage.createUser({
-        email: email.toLowerCase().trim(),
-        fullName,
-        avatarUrl: avatarUrl || null
-      });
-      
       res.json(user);
     } catch (error) {
-      console.error("Add user error:", error);
-      res.status(500).json({ message: "Failed to add user" });
+      console.error("User sync error:", error);
+      res.status(500).json({ message: "Failed to sync user" });
     }
   });
 
