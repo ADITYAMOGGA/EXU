@@ -6,8 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { useChats } from '@/hooks/useChats';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { AddFriendsModal } from '@/components/AddFriendsModal';
 import { Search, Edit, Settings, Users, Archive, LogOut, UserPlus, Bell } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLocation } from 'wouter';
 
 interface SidebarProps {
   selectedChatId: string | null;
@@ -23,6 +25,7 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
   const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
   const { user, signOut } = useAuth();
   const { chats, loading } = useChats();
+  const [, setLocation] = useLocation();
 
   const filteredChats = chats.filter(chat => {
     const matchesSearch = chat.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -65,7 +68,11 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
       {/* Header */}
       <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-indigo-500 to-purple-600">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <div 
+            className="flex items-center space-x-3 cursor-pointer hover:bg-white hover:bg-opacity-10 rounded-lg p-2 transition-colors"
+            onClick={() => setLocation('/profile')}
+            title="Edit Profile"
+          >
             <div className="relative">
               <Avatar className="w-10 h-10 border-2 border-white">
                 <AvatarImage src={user?.user_metadata?.avatar_url} />
@@ -103,6 +110,7 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
               className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full text-white"
               onClick={() => setShowAddFriends(true)}
               title="Add Friends"
+              data-testid="button-add-friends"
             >
               <UserPlus size={16} />
             </Button>
@@ -253,15 +261,10 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
       </div>
 
       {/* Friend Connection Modals */}
-      {/* TODO: Import these components once they're added to the Sidebar imports */}
-      {/* <AddFriendsModal 
+      <AddFriendsModal 
         isOpen={showAddFriends} 
         onClose={() => setShowAddFriends(false)} 
       />
-      <FriendRequestsModal 
-        isOpen={showFriendRequests} 
-        onClose={() => setShowFriendRequests(false)} 
-      /> */}
     </div>
   );
 }
