@@ -35,7 +35,9 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const [showResendConfirmation, setShowResendConfirmation] = useState(false);
+  const [resendEmail, setResendEmail] = useState('');
+  const { signIn, signUp, resendConfirmation } = useAuth();
   const [, setLocation] = useLocation();
 
   const loginForm = useForm<LoginForm>({
@@ -63,8 +65,13 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       onClose();
       // Redirect to chat page after successful login
       setLocation('/chat');
-    } catch (error) {
-      // Error handling is done in useAuth
+    } catch (error: any) {
+      console.log('Login error caught in component:', error);
+      // Check if it's an email confirmation issue
+      if (error?.message?.includes('Email not confirmed') || error?.message?.includes('email_not_confirmed')) {
+        setShowResendConfirmation(true);
+        setResendEmail(data.email);
+      }
     } finally {
       setLoading(false);
     }
@@ -74,11 +81,17 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     setLoading(true);
     try {
       await signUp(data.email, data.password, data.fullName);
-      onClose();
-      // Redirect to chat page after successful registration
-      setLocation('/chat');
-    } catch (error) {
-      // Error handling is done in useAuth
+      // Don't close modal or redirect after signup - user needs to confirm email first
+      setShowResendConfirmation(true);
+      setResendEmail(data.email);
+    } catch (error: any) {
+      console.log('Registration error caught in component:', error);
+      // Check if user already exists
+      if (error?.message?.includes('User already registered')) {
+        // Switch to login mode
+        setIsLogin(true);
+        loginForm.setValue('email', data.email);
+      }
     } finally {
       setLoading(false);
     }
@@ -101,6 +114,14 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <DialogDescription className="text-gray-600 dark:text-gray-400">
             {isLogin ? 'Sign in to start chatting' : 'Join ChatterLite today'}
           </DialogDescription>
+          
+          {/* Debug info for development */}
+          {import.meta.env.DEV && (
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-2 rounded text-xs text-blue-700 dark:text-blue-300">
+              <p>Supabase URL: {import.meta.env.VITE_SUPABASE_URL ? '✓ Set' : '✗ Missing'}</p>
+              <p>Supabase Key: {import.meta.env.VITE_SUPABASE_ANON_KEY ? '✓ Set' : '✗ Missing'}</p>
+            </div>
+          )}
         </DialogHeader>
 
         {isLogin ? (
@@ -147,9 +168,31 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               type="submit"
               disabled={loading}
               className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 rounded-xl py-3"
+              data-testid="button-signin"
             >
               {loading ? 'Signing In...' : 'Sign In'}
             </Button>
+            
+            {showResendConfirmation && (
+              <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                <p className="text-sm text-yellow-800 dark:text-yellow-200 mb-2">
+                  Need to confirm your email? We can resend the confirmation link.
+                </p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    resendConfirmation(resendEmail || loginForm.getValues('email'));
+                    setShowResendConfirmation(false);
+                  }}
+                  className="w-full"
+                  data-testid="button-resend-confirmation"
+                >
+                  Resend Confirmation Email
+                </Button>
+              </div>
+            )}
           </form>
         ) : (
           <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
@@ -210,9 +253,43 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               type="submit"
               disabled={loading}
               className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 rounded-xl py-3"
+              data-testid="button-signup"
             >
               {loading ? 'Creating Account...' : 'Create Account'}
             </Button>
+            
+            {showResendConfirmation && (
+              <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
+                <p className="text-sm text-green-800 dark:text-green-200 mb-2">
+                  Account created! Please check your email and click the confirmation link before signing in.
+                </p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    resendConfirmation(resendEmail);
+                  }}
+                  className="w-full mb-2"
+                  data-testid="button-resend-confirmation"
+                >
+                  Resend Confirmation Email
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setIsLogin(true);
+                    setShowResendConfirmation(false);
+                    loginForm.setValue('email', resendEmail);
+                  }}
+                  className="w-full"
+                >
+                  Already confirmed? Sign In
+                </Button>
+              </div>
+            )}
           </form>
         )}
 
