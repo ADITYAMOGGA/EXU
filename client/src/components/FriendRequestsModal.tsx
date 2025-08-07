@@ -55,9 +55,11 @@ export function FriendRequestsModal({ isOpen, onClose }: FriendRequestsModalProp
   }, [isOpen]);
 
   const loadFriendRequests = async () => {
+    if (!user?.id) return;
+    
     setLoading(true);
     try {
-      const response = await fetch('/api/friend-requests/pending');
+      const response = await fetch(`/api/friend-requests/pending/${user.id}`);
       if (response.ok) {
         const requests = await response.json();
         setFriendRequests(requests);

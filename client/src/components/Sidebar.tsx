@@ -7,6 +7,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useChats } from '@/hooks/useChats';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { AddFriendsModal } from '@/components/AddFriendsModal';
+import { FriendRequestsModal } from '@/components/FriendRequestsModal';
+import { useFriendRequests } from '@/hooks/useFriendRequests';
 import { Search, Edit, Settings, Users, Archive, LogOut, UserPlus, Bell } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLocation } from 'wouter';
@@ -22,9 +24,9 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
   const [activeTab, setActiveTab] = useState<'all' | 'groups' | 'archived'>('all');
   const [showAddFriends, setShowAddFriends] = useState(false);
   const [showFriendRequests, setShowFriendRequests] = useState(false);
-  const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
   const { user, signOut } = useAuth();
   const { chats, loading } = useChats();
+  const { pendingCount } = useFriendRequests();
   const [, setLocation] = useLocation();
 
   const filteredChats = chats.filter(chat => {
@@ -98,9 +100,9 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
               title="Friend Requests"
             >
               <Bell size={16} />
-              {pendingRequestsCount > 0 && (
+              {pendingCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                  {pendingRequestsCount > 9 ? '9+' : pendingRequestsCount}
+                  {pendingCount > 9 ? '9+' : pendingCount}
                 </span>
               )}
             </Button>
@@ -264,6 +266,10 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
       <AddFriendsModal 
         isOpen={showAddFriends} 
         onClose={() => setShowAddFriends(false)} 
+      />
+      <FriendRequestsModal 
+        isOpen={showFriendRequests} 
+        onClose={() => setShowFriendRequests(false)} 
       />
     </div>
   );

@@ -14,6 +14,8 @@ export interface IStorage {
   searchUsers(query: string): Promise<User[]>;
   createFriendRequest(friendRequest: InsertFriendRequest): Promise<FriendRequest>;
   getFriendRequests(userId: string): Promise<FriendRequest[]>;
+  getPendingFriendRequests(userId: string): Promise<FriendRequest[]>;
+  updateFriendRequestStatus(requestId: string, status: string): Promise<FriendRequest | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -96,6 +98,21 @@ export class MemStorage implements IStorage {
     return Array.from(this.friendRequests.values()).filter(request => 
       request.senderId === userId || request.receiverId === userId
     );
+  }
+
+  async getPendingFriendRequests(userId: string): Promise<FriendRequest[]> {
+    return Array.from(this.friendRequests.values()).filter(
+      (request) => request.receiverId === userId && request.status === 'pending',
+    );
+  }
+
+  async updateFriendRequestStatus(requestId: string, status: string): Promise<FriendRequest | undefined> {
+    const request = this.friendRequests.get(requestId);
+    if (!request) return undefined;
+    
+    const updatedRequest = { ...request, status, updatedAt: new Date() };
+    this.friendRequests.set(requestId, updatedRequest);
+    return updatedRequest;
   }
 }
 

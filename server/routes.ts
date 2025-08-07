@@ -82,6 +82,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get pending friend requests for notifications
+  app.get("/api/friend-requests/pending/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const friendRequests = await storage.getPendingFriendRequests(userId);
+      res.json(friendRequests);
+    } catch (error) {
+      console.error("Get pending friend requests error:", error);
+      res.status(500).json({ message: "Failed to get pending friend requests" });
+    }
+  });
+
+  // Update friend request status
+  app.patch("/api/friend-requests/:requestId", async (req, res) => {
+    try {
+      const { requestId } = req.params;
+      const { status } = req.body;
+      
+      if (!status || !['accepted', 'rejected'].includes(status)) {
+        return res.status(400).json({ message: "Valid status is required" });
+      }
+      
+      const updatedRequest = await storage.updateFriendRequestStatus(requestId, status);
+      
+      if (!updatedRequest) {
+        return res.status(404).json({ message: "Friend request not found" });
+      }
+      
+      res.json(updatedRequest);
+    } catch (error) {
+      console.error("Update friend request error:", error);
+      res.status(500).json({ message: "Failed to update friend request" });
+    }
+  });
+
   // Get user by ID for invite links
   app.get("/api/users/:userId", async (req, res) => {
     try {
