@@ -162,14 +162,14 @@ export function AddFriendsModal({ isOpen, onClose }: AddFriendsModalProps) {
                   <div key={foundUser.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
                     <div className="flex items-center space-x-3">
                       <Avatar className="w-10 h-10">
-                        <AvatarImage src={foundUser.avatar_url || ''} />
+                        <AvatarImage src={foundUser.avatarUrl || ''} />
                         <AvatarFallback className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
-                          {getUserInitials(foundUser.full_name)}
+                          {getUserInitials(foundUser.fullName)}
                         </AvatarFallback>
                       </Avatar>
                       <div>
                         <h4 className="font-medium text-gray-900 dark:text-gray-100">
-                          {foundUser.full_name}
+                          {foundUser.fullName}
                         </h4>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                           {foundUser.email}
