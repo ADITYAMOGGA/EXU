@@ -32,6 +32,10 @@ export class MemStorage implements IStorage {
       { email: "sarah@example.com", fullName: "Sarah Johnson", avatarUrl: null },
       { email: "mike@example.com", fullName: "Mike Wilson", avatarUrl: null },
       { email: "emma@example.com", fullName: "Emma Davis", avatarUrl: null },
+      { email: "navaspy1234@gmail.com", fullName: "Bravo", avatarUrl: null },
+      { email: "test@example.com", fullName: "Test User", avatarUrl: null },
+      { email: "alice@example.com", fullName: "Alice Cooper", avatarUrl: null },
+      { email: "bob@example.com", fullName: "Bob Johnson", avatarUrl: null },
     ];
 
     for (const user of demoUsers) {
