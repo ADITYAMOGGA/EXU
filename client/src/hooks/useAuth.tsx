@@ -46,6 +46,24 @@ export function useAuth() {
     }
 
     try {
+      // First check if user is pre-approved in database
+      console.log('Checking if user is pre-approved:', email);
+      const authResponse = await fetch('/api/users/authorize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+      });
+
+      if (!authResponse.ok) {
+        toast({
+          title: "Registration Not Allowed",
+          description: "You must be pre-approved to register. Please contact an administrator.",
+          variant: "destructive",
+        });
+        throw new Error('User not pre-approved for registration');
+      }
+
+      console.log('User is pre-approved, proceeding with registration');
       console.log('Attempting to sign up with:', { email, fullName });
       
       const { data, error } = await supabase.auth.signUp({
@@ -88,7 +106,8 @@ export function useAuth() {
     } catch (error: any) {
       console.error('Sign up error:', error);
       
-      if (!error.message.includes('User already registered')) {
+      if (!error.message.includes('User already registered') && 
+          !error.message.includes('User not pre-approved')) {
         toast({
           title: "Error",
           description: error.message || 'An unexpected error occurred. Please try again.',
@@ -111,6 +130,25 @@ export function useAuth() {
     }
 
     try {
+      // First check if user is authorized to login
+      console.log('Checking authorization for:', email);
+      const authResponse = await fetch('/api/users/authorize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+      });
+
+      if (!authResponse.ok) {
+        const authError = await authResponse.json();
+        toast({
+          title: "Access Denied",
+          description: authError.message || "You are not authorized to access this application.",
+          variant: "destructive",
+        });
+        throw new Error(authError.message || 'User not authorized');
+      }
+
+      console.log('User authorized, proceeding with Supabase sign in');
       console.log('Attempting to sign in with:', { email, supabaseUrl: import.meta.env.VITE_SUPABASE_URL });
       
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -147,22 +185,6 @@ export function useAuth() {
       
       if (data?.user) {
         console.log('Sign in successful:', data.user.email);
-        
-        // Sync user with local storage
-        try {
-          await fetch('/api/users/sync', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              id: data.user.id,
-              email: data.user.email,
-              fullName: data.user.user_metadata?.full_name || data.user.email.split('@')[0],
-              avatarUrl: data.user.user_metadata?.avatar_url || null
-            }),
-          });
-        } catch (syncError) {
-          console.error('Failed to sync user:', syncError);
-        }
         
         toast({
           title: "Success",
