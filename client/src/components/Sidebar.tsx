@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { useChats } from '@/hooks/useChats';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { Search, Edit, Settings, Users, Archive, LogOut } from 'lucide-react';
+import { Search, Edit, Settings, Users, Archive, LogOut, UserPlus, Bell } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface SidebarProps {
@@ -18,6 +18,9 @@ interface SidebarProps {
 export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'groups' | 'archived'>('all');
+  const [showAddFriends, setShowAddFriends] = useState(false);
+  const [showFriendRequests, setShowFriendRequests] = useState(false);
+  const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
   const { user, signOut } = useAuth();
   const { chats, loading } = useChats();
 
@@ -83,8 +86,32 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
             <Button
               variant="ghost"
               size="sm"
+              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full text-white relative"
+              onClick={() => setShowFriendRequests(true)}
+              title="Friend Requests"
+            >
+              <Bell size={16} />
+              {pendingRequestsCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                  {pendingRequestsCount > 9 ? '9+' : pendingRequestsCount}
+                </span>
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full text-white"
+              onClick={() => setShowAddFriends(true)}
+              title="Add Friends"
+            >
+              <UserPlus size={16} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full text-white"
               onClick={onNewChat}
+              title="New Chat"
             >
               <Edit size={16} />
             </Button>
@@ -94,6 +121,7 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
               size="sm"
               className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full text-white"
               onClick={signOut}
+              title="Sign Out"
             >
               <LogOut size={16} />
             </Button>
@@ -223,6 +251,17 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
           ))
         )}
       </div>
+
+      {/* Friend Connection Modals */}
+      {/* TODO: Import these components once they're added to the Sidebar imports */}
+      {/* <AddFriendsModal 
+        isOpen={showAddFriends} 
+        onClose={() => setShowAddFriends(false)} 
+      />
+      <FriendRequestsModal 
+        isOpen={showFriendRequests} 
+        onClose={() => setShowFriendRequests(false)} 
+      /> */}
     </div>
   );
 }

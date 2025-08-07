@@ -38,7 +38,7 @@ export const messages = pgTable("messages", {
   fileUrl: text("file_url"),
   fileName: text("file_name"),
   fileSize: integer("file_size"),
-  replyToId: uuid("reply_to_id").references(() => messages.id),
+  replyToId: uuid("reply_to_id"),
   isRead: boolean("is_read").default(false),
   isDelivered: boolean("is_delivered").default(false),
   createdAt: timestamp("created_at").defaultNow(),
@@ -49,6 +49,24 @@ export const messageReactions = pgTable("message_reactions", {
   messageId: uuid("message_id").references(() => messages.id),
   userId: uuid("user_id").references(() => users.id),
   emoji: text("emoji").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const friendRequests = pgTable("friend_requests", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  senderId: uuid("sender_id").references(() => users.id),
+  receiverId: uuid("receiver_id").references(() => users.id),
+  status: text("status").default("pending"), // pending, accepted, rejected
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const contacts = pgTable("contacts", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid("user_id").references(() => users.id),
+  contactId: uuid("contact_id").references(() => users.id),
+  nickname: text("nickname"),
+  isFavorite: boolean("is_favorite").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -73,6 +91,17 @@ export const insertMessageReactionSchema = createInsertSchema(messageReactions).
   createdAt: true,
 });
 
+export const insertFriendRequestSchema = createInsertSchema(friendRequests).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertContactSchema = createInsertSchema(contacts).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -83,3 +112,7 @@ export type InsertMessage = z.infer<typeof insertMessageSchema>;
 export type MessageReaction = typeof messageReactions.$inferSelect;
 export type InsertMessageReaction = z.infer<typeof insertMessageReactionSchema>;
 export type ChatMember = typeof chatMembers.$inferSelect;
+export type FriendRequest = typeof friendRequests.$inferSelect;
+export type InsertFriendRequest = z.infer<typeof insertFriendRequestSchema>;
+export type Contact = typeof contacts.$inferSelect;
+export type InsertContact = z.infer<typeof insertContactSchema>;
