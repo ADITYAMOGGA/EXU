@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: chatterlite
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+    disk:
+      name: chatterlite-disk
+      sizeGB: 1
+      mountPath: /opt/render/project/storage

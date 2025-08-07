@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
 import { useToast } from '@/hooks/use-toast';
 
@@ -9,9 +9,18 @@ export function useAuth() {
   const { toast } = useToast();
 
   useEffect(() => {
+    if (!isSupabaseConfigured) {
+      console.error('Supabase is not properly configured. Authentication will not work.');
+      setLoading(false);
+      return;
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      setLoading(false);
+    }).catch((error) => {
+      console.error('Error getting session:', error);
       setLoading(false);
     });
 
@@ -27,6 +36,15 @@ export function useAuth() {
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
+    if (!isSupabaseConfigured) {
+      toast({
+        title: "Configuration Error",
+        description: "Authentication service is not properly configured. Please contact support.",
+        variant: "destructive",
+      });
+      throw new Error('Supabase not configured');
+    }
+
     try {
       const { error } = await supabase.auth.signUp({
         email,
@@ -55,6 +73,15 @@ export function useAuth() {
   };
 
   const signIn = async (email: string, password: string) => {
+    if (!isSupabaseConfigured) {
+      toast({
+        title: "Configuration Error",
+        description: "Authentication service is not properly configured. Please contact support.",
+        variant: "destructive",
+      });
+      throw new Error('Supabase not configured');
+    }
+
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
