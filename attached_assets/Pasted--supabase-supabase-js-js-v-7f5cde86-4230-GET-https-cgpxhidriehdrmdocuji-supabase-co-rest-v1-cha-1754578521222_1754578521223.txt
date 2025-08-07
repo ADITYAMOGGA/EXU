@@ -1,0 +1,128 @@
+@supabase_supabase-js.js?v=7f5cde86:4230 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…avatar_url%2Ccreated_at%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396 500 (Internal Server Error)
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4230
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4251
+fulfilled	@	@supabase_supabase-js.js?v=7f5cde86:4203
+Promise.then		
+step	@	@supabase_supabase-js.js?v=7f5cde86:4216
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4218
+__awaiter6	@	@supabase_supabase-js.js?v=7f5cde86:4200
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4241
+then	@	@supabase_supabase-js.js?v=7f5cde86:90
+
+useChats.tsx:113 Error fetching chats: 
+{code: '42P17', details: null, hint: null, message: 'infinite recursion detected in policy for relation "chat_members"'}
+fetchChats	@	useChats.tsx:113
+await in fetchChats		
+(anonymous)	@	useChats.tsx:24
+@supabase_supabase-js.js?v=7f5cde86:4230 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…avatar_url%2Ccreated_at%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396 500 (Internal Server Error)
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4230
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4251
+fulfilled	@	@supabase_supabase-js.js?v=7f5cde86:4203
+Promise.then		
+step	@	@supabase_supabase-js.js?v=7f5cde86:4216
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4218
+__awaiter6	@	@supabase_supabase-js.js?v=7f5cde86:4200
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4241
+then	@	@supabase_supabase-js.js?v=7f5cde86:90
+useChats.tsx:113 Error fetching chats: 
+{code: '42P17', details: null, hint: null, message: 'infinite recursion detected in policy for relation "chat_members"'}
+fetchChats	@	useChats.tsx:113
+await in fetchChats		
+(anonymous)	@	useChats.tsx:24
+@supabase_supabase-js.js?v=7f5cde86:4230 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…avatar_url%2Ccreated_at%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396 500 (Internal Server Error)
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4230
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4251
+fulfilled	@	@supabase_supabase-js.js?v=7f5cde86:4203
+Promise.then		
+step	@	@supabase_supabase-js.js?v=7f5cde86:4216
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4218
+__awaiter6	@	@supabase_supabase-js.js?v=7f5cde86:4200
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4241
+then	@	@supabase_supabase-js.js?v=7f5cde86:90
+useChats.tsx:113 Error fetching chats: 
+{code: '42P17', details: null, hint: null, message: 'infinite recursion detected in policy for relation "chat_members"'}
+fetchChats	@	useChats.tsx:113
+await in fetchChats		
+(anonymous)	@	useChats.tsx:24
+@supabase_supabase-js.js?v=7f5cde86:4230 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…avatar_url%2Ccreated_at%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396 500 (Internal Server Error)
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4230
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4251
+fulfilled	@	@supabase_supabase-js.js?v=7f5cde86:4203
+Promise.then		
+step	@	@supabase_supabase-js.js?v=7f5cde86:4216
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4218
+__awaiter6	@	@supabase_supabase-js.js?v=7f5cde86:4200
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4241
+then	@	@supabase_supabase-js.js?v=7f5cde86:90
+useChats.tsx:113 Error fetching chats: 
+{code: '42P17', details: null, hint: null, message: 'infinite recursion detected in policy for relation "chat_members"'}
+fetchChats	@	useChats.tsx:113
+await in fetchChats		
+(anonymous)	@	useChats.tsx:24
+@supabase_supabase-js.js?v=7f5cde86:4230 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…avatar_url%2Ccreated_at%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396 500 (Internal Server Error)
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4230
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4251
+fulfilled	@	@supabase_supabase-js.js?v=7f5cde86:4203
+Promise.then		
+step	@	@supabase_supabase-js.js?v=7f5cde86:4216
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4218
+__awaiter6	@	@supabase_supabase-js.js?v=7f5cde86:4200
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4241
+then	@	@supabase_supabase-js.js?v=7f5cde86:90
+useChats.tsx:113 Error fetching chats: 
+{code: '42P17', details: null, hint: null, message: 'infinite recursion detected in policy for relation "chat_members"'}
+code
+: 
+"42P17"
+details
+: 
+null
+hint
+: 
+null
+message
+: 
+"infinite recursion detected in policy for relation \"chat_members\""
+[[Prototype]]
+: 
+Object
+fetchChats	@	useChats.tsx:113
+await in fetchChats		
+(anonymous)	@	useChats.tsx:24
+@supabase_supabase-js.js?v=7f5cde86:4230 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…avatar_url%2Ccreated_at%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396 500 (Internal Server Error)
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4230
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4251
+fulfilled	@	@supabase_supabase-js.js?v=7f5cde86:4203
+Promise.then		
+step	@	@supabase_supabase-js.js?v=7f5cde86:4216
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4218
+__awaiter6	@	@supabase_supabase-js.js?v=7f5cde86:4200
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4241
+then	@	@supabase_supabase-js.js?v=7f5cde86:90
+useChats.tsx:113 Error fetching chats: 
+{code: '42P17', details: null, hint: null, message: 'infinite recursion detected in policy for relation "chat_members"'}
+fetchChats	@	useChats.tsx:113
+await in fetchChats		
+(anonymous)	@	useChats.tsx:24
+@supabase_supabase-js.js?v=7f5cde86:4230 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…avatar_url%2Ccreated_at%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396 500 (Internal Server Error)
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4230
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4251
+fulfilled	@	@supabase_supabase-js.js?v=7f5cde86:4203
+Promise.then		
+step	@	@supabase_supabase-js.js?v=7f5cde86:4216
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4218
+__awaiter6	@	@supabase_supabase-js.js?v=7f5cde86:4200
+(anonymous)	@	@supabase_supabase-js.js?v=7f5cde86:4241
+then	@	@supabase_supabase-js.js?v=7f5cde86:90
+useChats.tsx:113 Error fetching chats: 
+{code: '42P17', details: null, hint: null, message: 'infinite recursion detected in policy for relation "chat_members"'}
+fetchChats	@	useChats.tsx:113
+await in fetchChats		
+(anonymous)	@	useChats.tsx:24
