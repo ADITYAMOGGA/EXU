@@ -41,35 +41,72 @@ export function useChats() {
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
+      // First, get all chats the user is a member of
+      const { data: chatMembersData, error: chatMembersError } = await supabase
         .from('chat_members')
         .select(`
           chats!inner(
             id,
             name,
             is_group,
-            avatar_url
-          ),
-          messages(
-            content,
+            avatar_url,
             created_at
           )
         `)
-        .eq('user_id', user.id)
+        .eq('user_id', user.id);
+
+      if (chatMembersError) throw chatMembersError;
+
+      if (!chatMembersData || chatMembersData.length === 0) {
+        setChats([]);
+        return;
+      }
+
+      // Get chat IDs
+      const chatIds = chatMembersData.map((item: any) => item.chats.id);
+
+      // Get the latest message for each chat
+      const { data: messagesData, error: messagesError } = await supabase
+        .from('messages')
+        .select('chat_id, content, created_at')
+        .in('chat_id', chatIds)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (messagesError) throw messagesError;
 
-      const formattedChats = data?.map((item: any) => ({
-        id: item.chats.id,
-        name: item.chats.name || 'Unknown',
-        isGroup: item.chats.is_group,
-        avatarUrl: item.chats.avatar_url,
-        lastMessage: item.messages?.[0]?.content || null,
-        lastMessageTime: item.messages?.[0]?.created_at || null,
-        unreadCount: 0, // TODO: Implement unread count
-        isOnline: !item.chats.is_group, // For direct chats, we'll implement online status later
-      })) || [];
+      // Create a map of latest messages per chat
+      const latestMessages = new Map();
+      if (messagesData) {
+        messagesData.forEach((msg: any) => {
+          if (!latestMessages.has(msg.chat_id)) {
+            latestMessages.set(msg.chat_id, msg);
+          }
+        });
+      }
+
+      // Format the chats with their latest messages
+      const formattedChats = chatMembersData.map((item: any) => {
+        const chat = item.chats;
+        const lastMessage = latestMessages.get(chat.id);
+        
+        return {
+          id: chat.id,
+          name: chat.name || 'Unknown',
+          isGroup: chat.is_group,
+          avatarUrl: chat.avatar_url,
+          lastMessage: lastMessage?.content || null,
+          lastMessageTime: lastMessage?.created_at || chat.created_at,
+          unreadCount: 0, // TODO: Implement unread count
+          isOnline: !chat.is_group, // For direct chats, we'll implement online status later
+        };
+      });
+
+      // Sort by last message time
+      formattedChats.sort((a, b) => {
+        const timeA = new Date(a.lastMessageTime || 0).getTime();
+        const timeB = new Date(b.lastMessageTime || 0).getTime();
+        return timeB - timeA;
+      });
 
       setChats(formattedChats);
     } catch (error) {
