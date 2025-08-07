@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation } from 'wouter';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,6 +36,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
+  const [, setLocation] = useLocation();
 
   const loginForm = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -59,6 +61,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     try {
       await signIn(data.email, data.password);
       onClose();
+      // Redirect to chat page after successful login
+      setLocation('/chat');
     } catch (error) {
       // Error handling is done in useAuth
     } finally {
@@ -71,6 +75,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     try {
       await signUp(data.email, data.password, data.fullName);
       onClose();
+      // Redirect to chat page after successful registration
+      setLocation('/chat');
     } catch (error) {
       // Error handling is done in useAuth
     } finally {

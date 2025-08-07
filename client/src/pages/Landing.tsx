@@ -51,7 +51,7 @@ export default function Landing() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Navigation */}
       <motion.nav
         initial={{ y: -50, opacity: 0 }}
@@ -77,7 +77,7 @@ export default function Landing() {
             <Button
               variant="ghost"
               onClick={handleSignIn}
-              className="hidden sm:flex hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="hidden sm:flex hover:bg-blue-50 text-slate-700"
               data-testid="button-signin"
             >
               Sign In
@@ -103,7 +103,7 @@ export default function Landing() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mb-6"
           >
-            <div className="inline-flex items-center space-x-2 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <div className="inline-flex items-center space-x-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
               <span>Real-time chat made simple</span>
             </div>
@@ -113,7 +113,7 @@ export default function Landing() {
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-bold text-slate-900 dark:text-white mb-6"
+            className="text-4xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-6"
           >
             Connect with
             <span className="block bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 bg-clip-text text-transparent">
@@ -125,7 +125,7 @@ export default function Landing() {
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed"
+            className="text-xl md:text-2xl text-slate-600 mb-8 max-w-3xl mx-auto leading-relaxed"
           >
             Experience the future of messaging with lightning-fast, secure, and beautiful conversations that bring people together.
           </motion.p>
@@ -149,7 +149,7 @@ export default function Landing() {
               size="lg"
               variant="outline"
               onClick={handleSignIn}
-              className="border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 px-8 py-4 text-lg transition-all duration-300 transform hover:scale-105"
+              className="border-slate-300 hover:bg-slate-50 px-8 py-4 text-lg transition-all duration-300 transform hover:scale-105"
               data-testid="button-signin-hero"
             >
               Sign In
@@ -197,10 +197,10 @@ export default function Landing() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
               Why Choose ChatterLite?
             </h2>
-            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Built with modern technology to provide the smoothest messaging experience
             </p>
           </motion.div>
@@ -214,16 +214,16 @@ export default function Landing() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ y: -5 }}
-                className="group p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200 dark:border-slate-700"
+                className="group p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200"
                 data-testid={`feature-${feature.title.toLowerCase().replace(' ', '-')}`}
               >
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <feature.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
+                <h3 className="text-xl font-semibold text-slate-900 mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-slate-600 dark:text-slate-300">
+                <p className="text-slate-600">
                   {feature.description}
                 </p>
               </motion.div>
@@ -273,17 +273,17 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="px-4 md:px-6 py-8 border-t border-slate-200 dark:border-slate-700">
+      <footer className="px-4 md:px-6 py-8 border-t border-slate-200">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center space-x-2 mb-4 md:mb-0">
             <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-md flex items-center justify-center">
               <MessageSquare className="w-4 h-4 text-white" />
             </div>
-            <span className="font-semibold text-slate-900 dark:text-white">ChatterLite</span>
+            <span className="font-semibold text-slate-900">ChatterLite</span>
           </div>
           
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-slate-600 dark:text-slate-300">
+            <span className="text-sm text-slate-600">
               Made with ❤️ for seamless conversations
             </span>
           </div>
