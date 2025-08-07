@@ -9,7 +9,8 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { AddFriendsModal } from '@/components/AddFriendsModal';
 import { FriendRequestsModal } from '@/components/FriendRequestsModal';
 import { useFriendRequests } from '@/hooks/useFriendRequests';
-import { Search, Edit, Settings, Users, Archive, LogOut, UserPlus, Bell } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Search, Edit, Settings, Users, Archive, LogOut, UserPlus, Bell, MoreVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLocation } from 'wouter';
 
@@ -91,7 +92,8 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
               <p className="text-xs text-white opacity-80">Online</p>
             </div>
           </div>
-          <div className="flex space-x-2">
+          {/* Desktop Icons - Hidden on small screens */}
+          <div className="hidden md:flex space-x-2">
             <Button
               variant="ghost"
               size="sm"
@@ -135,6 +137,59 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
             >
               <LogOut size={16} />
             </Button>
+          </div>
+
+          {/* Mobile Dropdown Menu - Shown on small screens */}
+          <div className="md:hidden flex items-center space-x-2">
+            <ThemeToggle />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full text-white relative"
+                >
+                  <MoreVertical size={16} />
+                  {pendingCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                      {pendingCount > 9 ? '9+' : pendingCount}
+                    </span>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem 
+                  onClick={() => setShowFriendRequests(true)}
+                  className="flex items-center justify-between"
+                >
+                  <div className="flex items-center space-x-2">
+                    <Bell size={16} />
+                    <span>Friend Requests</span>
+                  </div>
+                  {pendingCount > 0 && (
+                    <Badge className="bg-red-500 text-white text-xs">
+                      {pendingCount > 9 ? '9+' : pendingCount}
+                    </Badge>
+                  )}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setShowAddFriends(true)}>
+                  <UserPlus size={16} className="mr-2" />
+                  <span>Add Friends</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={onNewChat}>
+                  <Edit size={16} className="mr-2" />
+                  <span>New Chat</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLocation('/profile')}>
+                  <Settings size={16} className="mr-2" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={signOut} className="text-red-600 dark:text-red-400">
+                  <LogOut size={16} className="mr-2" />
+                  <span>Sign Out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
