@@ -1,0 +1,28 @@
+index-BPJDKleX.js:272 Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+index-BPJDKleX.js:279 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…t%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396&order=created_at.desc 400 (Bad Request)
+index-BPJDKleX.js:292 Error fetching chats: 
+{code: 'PGRST200', details: "Searched for a foreign key relationship between 'c…n the schema 'public', but no matches were found.", hint: null, message: "Could not find a relationship between 'chat_members' and 'messages' in the schema cache"}
+index-BPJDKleX.js:279 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…t%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396&order=created_at.desc 400 (Bad Request)
+index-BPJDKleX.js:292 Error fetching chats: 
+{code: 'PGRST200', details: "Searched for a foreign key relationship between 'c…n the schema 'public', but no matches were found.", hint: null, message: "Could not find a relationship between 'chat_members' and 'messages' in the schema cache"}
+index-BPJDKleX.js:279 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…t%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396&order=created_at.desc 400 (Bad Request)
+index-BPJDKleX.js:292 Error fetching chats: 
+{code: 'PGRST200', details: "Searched for a foreign key relationship between 'c…n the schema 'public', but no matches were found.", hint: null, message: "Could not find a relationship between 'chat_members' and 'messages' in the schema cache"}
+index-BPJDKleX.js:279 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…t%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396&order=created_at.desc 400 (Bad Request)
+index-BPJDKleX.js:292 Error fetching chats: 
+{code: 'PGRST200', details: "Searched for a foreign key relationship between 'c…n the schema 'public', but no matches were found.", hint: null, message: "Could not find a relationship between 'chat_members' and 'messages' in the schema cache"}
+index-BPJDKleX.js:279 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…t%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396&order=created_at.desc 400 (Bad Request)
+index-BPJDKleX.js:292 Error fetching chats: 
+{code: 'PGRST200', details: "Searched for a foreign key relationship between 'c…n the schema 'public', but no matches were found.", hint: null, message: "Could not find a relationship between 'chat_members' and 'messages' in the schema cache"}
+index-BPJDKleX.js:279 
+ GET https://cgpxhidriehdrmdocuji.supabase.co/rest/v1/chat_members?select=chats%…t%29&user_id=eq.6bd9f920-7d68-4d53-b1ee-2992f86fe396&order=created_at.desc 400 (Bad Request)
+index-BPJDKleX.js:292 Error fetching chats: 
+{code: 'PGRST200', details: "Searched for a foreign key relationship between 'c…n the schema 'public', but no matches were found.", hint: null, message: "Could not find a relationship between 'chat_members' and 'messages' in the schema cache"}
+
+﻿

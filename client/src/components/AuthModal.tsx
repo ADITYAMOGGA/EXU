@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -98,9 +98,9 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             {isLogin ? 'Welcome to ChatterLite' : 'Create Account'}
           </DialogTitle>
-          <p className="text-gray-600 dark:text-gray-400">
+          <DialogDescription className="text-gray-600 dark:text-gray-400">
             {isLogin ? 'Sign in to start chatting' : 'Join ChatterLite today'}
-          </p>
+          </DialogDescription>
         </DialogHeader>
 
         {isLogin ? (
