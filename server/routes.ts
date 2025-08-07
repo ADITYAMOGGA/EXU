@@ -3,6 +3,35 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Create or sync user endpoint (called when user signs in)
+  app.post("/api/users/sync", async (req, res) => {
+    try {
+      const { id, email, fullName, avatarUrl } = req.body;
+      
+      if (!id || !email || !fullName) {
+        return res.status(400).json({ message: "User ID, email, and fullName are required" });
+      }
+      
+      // Check if user already exists
+      let user = await storage.getUserById(id);
+      
+      if (!user) {
+        // Create new user in local storage
+        user = await storage.createUserWithId({
+          id,
+          email,
+          fullName,
+          avatarUrl: avatarUrl || null
+        });
+      }
+      
+      res.json(user);
+    } catch (error) {
+      console.error("User sync error:", error);
+      res.status(500).json({ message: "Failed to sync user" });
+    }
+  });
+
   // User search endpoint
   app.get("/api/users/search", async (req, res) => {
     try {

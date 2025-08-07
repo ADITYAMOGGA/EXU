@@ -147,6 +147,23 @@ export function useAuth() {
       
       if (data?.user) {
         console.log('Sign in successful:', data.user.email);
+        
+        // Sync user with local storage
+        try {
+          await fetch('/api/users/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: data.user.id,
+              email: data.user.email,
+              fullName: data.user.user_metadata?.full_name || data.user.email.split('@')[0],
+              avatarUrl: data.user.user_metadata?.avatar_url || null
+            }),
+          });
+        } catch (syncError) {
+          console.error('Failed to sync user:', syncError);
+        }
+        
         toast({
           title: "Success",
           description: "Signed in successfully!",

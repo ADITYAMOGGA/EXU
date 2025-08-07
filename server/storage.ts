@@ -9,6 +9,7 @@ export interface IStorage {
   getUserById(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  createUserWithId(user: { id: string; email: string; fullName: string; avatarUrl: string | null }): Promise<User>;
   searchUsers(query: string): Promise<User[]>;
   createFriendRequest(friendRequest: InsertFriendRequest): Promise<FriendRequest>;
   getFriendRequests(userId: string): Promise<FriendRequest[]>;
@@ -55,6 +56,17 @@ export class MemStorage implements IStorage {
       lastSeen: new Date()
     };
     this.users.set(id, user);
+    return user;
+  }
+
+  async createUserWithId(userData: { id: string; email: string; fullName: string; avatarUrl: string | null }): Promise<User> {
+    const user: User = { 
+      ...userData,
+      isOnline: false,
+      createdAt: new Date(),
+      lastSeen: new Date()
+    };
+    this.users.set(userData.id, user);
     return user;
   }
 
