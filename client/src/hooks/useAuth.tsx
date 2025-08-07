@@ -173,14 +173,31 @@ export function useAuth() {
   };
 
   const signOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-    } catch (error: any) {
+    if (!isSupabaseConfigured) {
+      // If Supabase isn't configured, just clear the user state locally
+      setUser(null);
       toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
+        title: "Success",
+        description: "Signed out successfully!",
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.signOut({ scope: 'local' });
+      if (error) throw error;
+      setUser(null);
+      toast({
+        title: "Success",
+        description: "Signed out successfully!",
+      });
+    } catch (error: any) {
+      console.error('Sign out error:', error);
+      // Force local logout if remote logout fails
+      setUser(null);
+      toast({
+        title: "Signed out",
+        description: "You have been signed out locally.",
       });
     }
   };

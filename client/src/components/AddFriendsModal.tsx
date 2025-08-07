@@ -27,36 +27,63 @@ export function AddFriendsModal({ isOpen, onClose }: AddFriendsModalProps) {
   };
 
   const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
     
     setLoading(true);
     try {
-      // Search for users by email or name
-      const response = await fetch(`/api/users/search?q=${encodeURIComponent(searchQuery)}`);
+      console.log('Searching for:', searchQuery);
+      const response = await fetch(`/api/users/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      
+      if (!response.ok) {
+        throw new Error(`Search failed: ${response.status}`);
+      }
+      
       const users = await response.json();
-      setSearchResults(users.filter((u: any) => u.id !== user?.id));
+      console.log('Search results:', users);
+      
+      // Filter out current user if they exist in results
+      const filteredUsers = Array.isArray(users) ? users.filter((u: any) => u.id !== user?.id) : [];
+      setSearchResults(filteredUsers);
+      
     } catch (error) {
       console.error('Search failed:', error);
+      setSearchResults([]);
     } finally {
       setLoading(false);
     }
   };
 
+  // Clear results when search query is empty
+  const handleSearchQueryChange = (value: string) => {
+    setSearchQuery(value);
+    if (!value.trim()) {
+      setSearchResults([]);
+    }
+  };
+
   const sendFriendRequest = async (userId: string) => {
+    if (!user) return;
+    
     try {
       const response = await fetch('/api/friend-requests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ receiverId: userId }),
+        body: JSON.stringify({ 
+          senderId: user.id,
+          receiverId: userId 
+        }),
       });
       
       if (response.ok) {
         // Update UI to show request sent
         setSearchResults(prev => 
-          prev.map(user => 
-            user.id === userId 
-              ? { ...user, friendRequestSent: true }
-              : user
+          prev.map(searchUser => 
+            searchUser.id === userId 
+              ? { ...searchUser, friendRequestSent: true }
+              : searchUser
           )
         );
       }
@@ -108,7 +135,7 @@ export function AddFriendsModal({ isOpen, onClose }: AddFriendsModalProps) {
               <Input
                 placeholder="Search by email or name..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchQueryChange(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 className="flex-1"
               />
