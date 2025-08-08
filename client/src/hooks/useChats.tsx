@@ -113,7 +113,7 @@ export function useChats() {
                 .from('chat_members')
                 .select(`
                   user_id,
-                  users!inner(
+                  users!user_id(
                     full_name,
                     avatar_url
                   )
@@ -126,6 +126,7 @@ export function useChats() {
                 console.error('Error fetching other members:', membersError);
               } else if (otherMembers && otherMembers.length > 0) {
                 const otherUser = otherMembers[0];
+                console.log('Other user data:', otherUser);
                 if (otherUser && otherUser.users) {
                   chatName = otherUser.users.full_name || 'Unknown User';
                   if (!avatarUrl) {

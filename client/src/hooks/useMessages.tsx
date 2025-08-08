@@ -74,7 +74,7 @@ export function useMessages(chatId: string | null) {
         .from('messages')
         .select(`
           *,
-          sender:users!messages_sender_id_fkey(
+          users!sender_id(
             id,
             full_name,
             avatar_url
@@ -93,16 +93,16 @@ export function useMessages(chatId: string | null) {
         ...msg,
         messageType: msg.message_type || 'text',
         sender: {
-          id: msg.sender.id,
-          fullName: msg.sender.full_name,
-          avatarUrl: msg.sender.avatar_url,
+          id: msg.users?.id || msg.sender_id,
+          fullName: msg.users?.full_name || 'Unknown User',
+          avatarUrl: msg.users?.avatar_url || null,
         },
         reactions: groupReactions(msg.message_reactions || []),
       })) || [];
 
       setMessages(formattedMessages);
     } catch (error) {
-      // console.error('Error fetching messages:', error);
+      console.error('Error fetching messages:', error);
     } finally {
       setLoading(false);
     }
