@@ -131,17 +131,17 @@ export function FriendRequestsModal({ isOpen, onClose }: FriendRequestsModalProp
               >
                 <div className="flex items-center space-x-3">
                   <Avatar className="w-12 h-12">
-                    <AvatarImage src={request.sender.avatarUrl || ''} />
+                    <AvatarImage src={request.sender?.avatarUrl || ''} />
                     <AvatarFallback className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
-                      {getUserInitials(request.sender.fullName)}
+                      {getUserInitials(request.sender?.fullName || 'Unknown User')}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <h4 className="font-medium text-gray-900 dark:text-gray-100 truncate">
-                      {request.sender.fullName}
+                      {request.sender?.fullName || 'Unknown User'}
                     </h4>
                     <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                      {request.sender.email}
+                      {request.sender?.email || 'No email'}
                     </p>
                     <p className="text-xs text-gray-400 dark:text-gray-500">
                       {formatTime(request.createdAt)}

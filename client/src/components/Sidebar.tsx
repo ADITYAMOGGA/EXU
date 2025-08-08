@@ -92,8 +92,8 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
               <p className="text-xs text-white opacity-80">Online</p>
             </div>
           </div>
-          {/* Desktop Icons - Hidden on small screens */}
-          <div className="hidden md:flex space-x-2">
+          {/* Desktop Icons - Hidden on small screens but always shown in full screen */}
+          <div className="hidden sm:flex space-x-2">
             <Button
               variant="ghost"
               size="sm"
@@ -140,7 +140,7 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
           </div>
 
           {/* Mobile Dropdown Menu - Shown on small screens */}
-          <div className="md:hidden flex items-center space-x-2">
+          <div className="sm:hidden flex items-center space-x-2">
             <ThemeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
