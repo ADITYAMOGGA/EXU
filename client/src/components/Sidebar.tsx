@@ -26,7 +26,7 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
   const [showAddFriends, setShowAddFriends] = useState(false);
   const [showFriendRequests, setShowFriendRequests] = useState(false);
   const { user, signOut } = useAuth();
-  const { chats, loading, fetchChats } = useChats();
+  const { chats, loading, fetchChats: refreshChats } = useChats();
   const { pendingCount } = useFriendRequests();
   const [, setLocation] = useLocation();
 
@@ -92,64 +92,8 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
               <p className="text-xs text-white opacity-80">Online</p>
             </div>
           </div>
-          {/* Desktop Icons - Always visible except on very small screens */}
-          <div className="flex space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full text-white relative"
-              onClick={() => setShowFriendRequests(true)}
-              title="Friend Requests"
-            >
-              <Bell size={16} />
-              {pendingCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                  {pendingCount > 9 ? '9+' : pendingCount}
-                </span>
-              )}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full text-white"
-              onClick={() => setShowAddFriends(true)}
-              title="Add Friends"
-              data-testid="button-add-friends"
-            >
-              <UserPlus size={16} />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full text-white"
-              onClick={onNewChat}
-              title="New Chat"
-            >
-              <Edit size={16} />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full text-white"
-              onClick={fetchChats}
-              title="Refresh Chats"
-            >
-              <RefreshCw size={16} />
-            </Button>
-            <ThemeToggle />
-            <Button
-              variant="ghost"
-              size="sm"
-              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full text-white"
-              onClick={signOut}
-              title="Sign Out"
-            >
-              <LogOut size={16} />
-            </Button>
-          </div>
-
-          {/* Mobile Dropdown Menu - Hidden since we show buttons directly */}
-          <div className="hidden flex items-center space-x-2">
+          {/* Menu Dropdown - Always visible */}
+          <div className="flex items-center space-x-2">
             <ThemeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -188,6 +132,10 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
                 <DropdownMenuItem onClick={onNewChat}>
                   <Edit size={16} className="mr-2" />
                   <span>New Chat</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={refreshChats}>
+                  <RefreshCw size={16} className="mr-2" />
+                  <span>Refresh Chats</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setLocation('/profile')}>
                   <Settings size={16} className="mr-2" />

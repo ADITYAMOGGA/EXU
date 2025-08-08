@@ -143,6 +143,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // If the request was accepted, automatically create a chat between the users
       if (status === 'accepted' && updatedRequest.senderId && updatedRequest.receiverId) {
+        console.log(`🤝 Friend request accepted! Creating chat between ${updatedRequest.senderId} and ${updatedRequest.receiverId}`);
         try {
           // Create new chat directly - simpler approach
           const { data: chatData, error: chatError } = await supabase
@@ -170,7 +171,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             if (membersError) {
               console.error("Error adding chat members:", membersError);
             } else {
-              console.log(`Created new chat ${chatData.id} for accepted friend request`);
+              console.log(`✅ Created new chat ${chatData.id} for accepted friend request between ${updatedRequest.senderId} and ${updatedRequest.receiverId}`);
             }
           }
         } catch (chatError) {
