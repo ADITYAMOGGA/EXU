@@ -24,7 +24,15 @@ export function ChatArea({ chatId, chatName, chatAvatar, isOnline, onBack }: Cha
   const { messages, loading, sendMessage, reactToMessage, uploadFile } = useMessages(chatId);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesEndRef.current) {
+      const messagesContainer = messagesEndRef.current.closest('.messages-container');
+      if (messagesContainer) {
+        messagesContainer.scrollTo({
+          top: messagesContainer.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    }
   };
 
   useEffect(() => {
@@ -86,7 +94,7 @@ export function ChatArea({ chatId, chatName, chatAvatar, isOnline, onBack }: Cha
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-gray-50 dark:bg-gray-900">
+    <div className="flex-1 flex flex-col bg-gray-50 dark:bg-gray-900 h-screen overflow-hidden">
       {/* Chat Header */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
         <div className="flex items-center space-x-3">
@@ -132,7 +140,7 @@ export function ChatArea({ chatId, chatName, chatAvatar, isOnline, onBack }: Cha
       </div>
 
       {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin messages-container">
         {loading ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-gray-500 dark:text-gray-400">Loading messages...</div>

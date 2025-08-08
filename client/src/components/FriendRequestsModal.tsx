@@ -31,8 +31,7 @@ export function FriendRequestsModal({ isOpen, onClose }: FriendRequestsModalProp
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
-  const { fetchChats } = useChats();
-  const refreshChats = fetchChats;
+  const { refreshChats } = useChats();
 
   const getUserInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
