@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -21,21 +21,23 @@ export function AddFriendsModal({ isOpen, onClose }: AddFriendsModalProps) {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   const getUserInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) {
+  const performSearch = useCallback(async (query: string) => {
+    if (!query.trim()) {
       setSearchResults([]);
+      setIsSearching(false);
       return;
     }
     
-    setLoading(true);
+    setIsSearching(true);
     try {
-      console.log('Searching for:', searchQuery);
-      const response = await fetch(`/api/users/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      console.log('Searching for:', query);
+      const response = await fetch(`/api/users/search?q=${encodeURIComponent(query.trim())}`);
       
       if (!response.ok) {
         throw new Error(`Search failed: ${response.status}`);
@@ -54,15 +56,25 @@ export function AddFriendsModal({ isOpen, onClose }: AddFriendsModalProps) {
       console.error('Search failed:', error);
       setSearchResults([]);
     } finally {
-      setLoading(false);
+      setIsSearching(false);
     }
-  };
+  }, [user?.id]);
+
+  // Debounced search - trigger search 500ms after user stops typing
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      performSearch(searchQuery);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery, performSearch]);
 
   // Clear results when search query is empty
   const handleSearchQueryChange = (value: string) => {
     setSearchQuery(value);
     if (!value.trim()) {
       setSearchResults([]);
+      setIsSearching(false);
     }
   };
 
@@ -133,31 +145,33 @@ export function AddFriendsModal({ isOpen, onClose }: AddFriendsModalProps) {
           </TabsList>
 
           <TabsContent value="search" className="space-y-4">
-            <div className="flex space-x-2">
-              <Input
-                placeholder="Search by email or name..."
-                value={searchQuery}
-                onChange={(e) => handleSearchQueryChange(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                className="flex-1"
-              />
-              <Button 
-                onClick={handleSearch} 
-                disabled={loading}
-                className="px-3"
-              >
-                <Search size={16} />
-              </Button>
+            <div className="space-y-3">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search by username or email..."
+                  value={searchQuery}
+                  onChange={(e) => handleSearchQueryChange(e.target.value)}
+                  className="pl-10"
+                />
+                {isSearching && (
+                  <div className="absolute right-3 top-3">
+                    <div className="animate-spin h-4 w-4 border-2 border-gray-300 border-t-blue-600 rounded-full"></div>
+                  </div>
+                )}
+              </div>
+              
+              {searchQuery.trim() && (
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {isSearching ? 'Searching...' : `${searchResults.length} result${searchResults.length !== 1 ? 's' : ''} found`}
+                </div>
+              )}
             </div>
 
             <div className="max-h-64 overflow-y-auto space-y-2">
-              {loading ? (
+              {searchResults.length === 0 && !isSearching ? (
                 <div className="text-center py-4 text-gray-500 dark:text-gray-400">
-                  Searching...
-                </div>
-              ) : searchResults.length === 0 ? (
-                <div className="text-center py-4 text-gray-500 dark:text-gray-400">
-                  {searchQuery ? 'No users found' : 'Start typing to search for friends'}
+                  {searchQuery.trim() ? 'No users found' : 'Start typing to search for friends'}
                 </div>
               ) : (
                 searchResults.map((foundUser) => (

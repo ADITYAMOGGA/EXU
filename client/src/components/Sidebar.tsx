@@ -26,7 +26,8 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
   const [showAddFriends, setShowAddFriends] = useState(false);
   const [showFriendRequests, setShowFriendRequests] = useState(false);
   const { user, signOut } = useAuth();
-  const { chats, loading, fetchChats: refreshChats } = useChats();
+  const { chats, loading, fetchChats } = useChats();
+  const refreshChats = fetchChats;
   const { pendingCount } = useFriendRequests();
   const [, setLocation] = useLocation();
 
