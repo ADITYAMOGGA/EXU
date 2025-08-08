@@ -36,7 +36,7 @@ export function AddFriendsModal({ isOpen, onClose }: AddFriendsModalProps) {
     
     setIsSearching(true);
     try {
-      console.log('Searching for:', query);
+      // console.log('Searching for:', query);
       const response = await fetch(`/api/users/search?q=${encodeURIComponent(query.trim())}`);
       
       if (!response.ok) {
@@ -44,7 +44,7 @@ export function AddFriendsModal({ isOpen, onClose }: AddFriendsModalProps) {
       }
       
       const users = await response.json();
-      console.log('Search results:', users);
+      // console.log('Search results:', users);
       
       // Filter out current user
       const filteredUsers = Array.isArray(users) ? users.filter((u: any) => 

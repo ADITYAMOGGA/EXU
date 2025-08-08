@@ -91,6 +91,7 @@ export function useMessages(chatId: string | null) {
 
       const formattedMessages = data?.map((msg: any) => ({
         ...msg,
+        messageType: msg.message_type || 'text',
         sender: {
           id: msg.sender.id,
           fullName: msg.sender.full_name,
@@ -101,7 +102,7 @@ export function useMessages(chatId: string | null) {
 
       setMessages(formattedMessages);
     } catch (error) {
-      console.error('Error fetching messages:', error);
+      // console.error('Error fetching messages:', error);
     } finally {
       setLoading(false);
     }

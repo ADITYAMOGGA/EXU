@@ -68,7 +68,7 @@ export function useChats() {
         throw chatMembersError;
       }
 
-      console.log('Chat members data:', chatMembersData);
+      // console.log('Chat members data:', chatMembersData);
 
       if (!chatMembersData || chatMembersData.length === 0) {
         setChats([]);
@@ -108,24 +108,33 @@ export function useChats() {
           
           // For direct chats (non-group), get the other user's name
           if (!chat.is_group && !chatName) {
-            const { data: otherMembers } = await supabase
-              .from('chat_members')
-              .select(`
-                user_id,
-                users!inner(
-                  full_name,
-                  avatar_url
-                )
-              `)
-              .eq('chat_id', chat.id)
-              .neq('user_id', user.id)
-              .limit(1);
-            
-            if (otherMembers && otherMembers.length > 0 && otherMembers[0].users) {
-              chatName = otherMembers[0].users.full_name || 'Unknown User';
-              if (!avatarUrl) {
-                avatarUrl = otherMembers[0].users.avatar_url;
+            try {
+              const { data: otherMembers, error: membersError } = await supabase
+                .from('chat_members')
+                .select(`
+                  user_id,
+                  users!inner(
+                    full_name,
+                    avatar_url
+                  )
+                `)
+                .eq('chat_id', chat.id)
+                .neq('user_id', user.id)
+                .limit(1);
+              
+              if (membersError) {
+                console.error('Error fetching other members:', membersError);
+              } else if (otherMembers && otherMembers.length > 0) {
+                const otherUser = otherMembers[0];
+                if (otherUser && otherUser.users) {
+                  chatName = otherUser.users.full_name || 'Unknown User';
+                  if (!avatarUrl) {
+                    avatarUrl = otherUser.users.avatar_url;
+                  }
+                }
               }
+            } catch (error) {
+              console.error('Error in chat member lookup:', error);
             }
           }
           

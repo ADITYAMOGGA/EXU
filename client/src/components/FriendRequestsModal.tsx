@@ -32,6 +32,7 @@ export function FriendRequestsModal({ isOpen, onClose }: FriendRequestsModalProp
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const { fetchChats } = useChats();
+  const refreshChats = fetchChats;
 
   const getUserInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
@@ -89,10 +90,10 @@ export function FriendRequestsModal({ isOpen, onClose }: FriendRequestsModalProp
         
         if (action === 'accept') {
           // Smooth update without page reload
-          console.log('Friend request accepted!');
+          // console.log('Friend request accepted!');
           // Manually refresh the chat list to show the new chat
           setTimeout(() => {
-            fetchChats();
+            refreshChats();
           }, 500); // Small delay to allow server to create the chat
           
           // Optional: Show a toast notification
