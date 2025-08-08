@@ -102,6 +102,11 @@ export const insertContactSchema = createInsertSchema(contacts).omit({
   createdAt: true,
 });
 
+export const insertChatMemberSchema = createInsertSchema(chatMembers).omit({
+  id: true,
+  joinedAt: true,
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -112,6 +117,7 @@ export type InsertMessage = z.infer<typeof insertMessageSchema>;
 export type MessageReaction = typeof messageReactions.$inferSelect;
 export type InsertMessageReaction = z.infer<typeof insertMessageReactionSchema>;
 export type ChatMember = typeof chatMembers.$inferSelect;
+export type InsertChatMember = z.infer<typeof insertChatMemberSchema>;
 export type FriendRequest = typeof friendRequests.$inferSelect;
 export type InsertFriendRequest = z.infer<typeof insertFriendRequestSchema>;
 export type Contact = typeof contacts.$inferSelect;

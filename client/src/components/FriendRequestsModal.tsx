@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { UserCheck, UserX, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface FriendRequest {
   id: string;
@@ -28,6 +29,7 @@ export function FriendRequestsModal({ isOpen, onClose }: FriendRequestsModalProp
   const { user } = useAuth();
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
   const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const getUserInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
@@ -84,7 +86,8 @@ export function FriendRequestsModal({ isOpen, onClose }: FriendRequestsModalProp
         setFriendRequests(prev => prev.filter(req => req.id !== requestId));
         
         if (action === 'accept') {
-          // Optionally show a success message or start a chat
+          // Refresh the chat list to show the new chat
+          queryClient.invalidateQueries({ queryKey: ['/api/chats'] });
           console.log('Friend request accepted!');
         }
       }
