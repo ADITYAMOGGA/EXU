@@ -7,6 +7,7 @@ import { UserCheck, UserX, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useQueryClient } from '@tanstack/react-query';
+import { useChats } from '@/hooks/useChats';
 
 interface FriendRequest {
   id: string;
@@ -30,6 +31,7 @@ export function FriendRequestsModal({ isOpen, onClose }: FriendRequestsModalProp
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
+  const { fetchChats } = useChats();
 
   const getUserInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
@@ -86,12 +88,15 @@ export function FriendRequestsModal({ isOpen, onClose }: FriendRequestsModalProp
         setFriendRequests(prev => prev.filter(req => req.id !== requestId));
         
         if (action === 'accept') {
-          // Refresh the chat list to show the new chat
+          // Smooth update without page reload
           console.log('Friend request accepted!');
-          // Add a small delay to allow the server to create the chat first
+          // Manually refresh the chat list to show the new chat
           setTimeout(() => {
-            window.location.reload(); // Simple refresh to show new chats
-          }, 1000);
+            fetchChats();
+          }, 500); // Small delay to allow server to create the chat
+          
+          // Optional: Show a toast notification
+          // toast({ title: "Friend request accepted!", description: "You can now start chatting." });
         }
       }
     } catch (error) {

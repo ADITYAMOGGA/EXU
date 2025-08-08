@@ -97,22 +97,50 @@ export function useChats() {
         });
       }
 
-      // Format the chats with their latest messages
-      const formattedChats = chatMembersData.map((item: any) => {
-        const chat = item.chats;
-        const lastMessage = latestMessages.get(chat.id);
-        
-        return {
-          id: chat.id,
-          name: chat.name || 'Unknown',
-          isGroup: chat.is_group,
-          avatarUrl: chat.avatar_url,
-          lastMessage: lastMessage?.content || null,
-          lastMessageTime: lastMessage?.created_at || chat.created_at,
-          unreadCount: 0, // TODO: Implement unread count
-          isOnline: !chat.is_group, // For direct chats, we'll implement online status later
-        };
-      });
+      // Format the chats with their latest messages and proper names
+      const formattedChats = await Promise.all(
+        chatMembersData.map(async (item: any) => {
+          const chat = item.chats;
+          const lastMessage = latestMessages.get(chat.id);
+          
+          let chatName = chat.name;
+          let avatarUrl = chat.avatar_url;
+          
+          // For direct chats (non-group), get the other user's name
+          if (!chat.is_group && !chatName) {
+            const { data: otherMembers } = await supabase
+              .from('chat_members')
+              .select(`
+                user_id,
+                users!inner(
+                  full_name,
+                  avatar_url
+                )
+              `)
+              .eq('chat_id', chat.id)
+              .neq('user_id', user.id)
+              .limit(1);
+            
+            if (otherMembers && otherMembers.length > 0 && otherMembers[0].users) {
+              chatName = otherMembers[0].users.full_name || 'Unknown User';
+              if (!avatarUrl) {
+                avatarUrl = otherMembers[0].users.avatar_url;
+              }
+            }
+          }
+          
+          return {
+            id: chat.id,
+            name: chatName || 'Unknown Chat',
+            isGroup: chat.is_group,
+            avatarUrl: avatarUrl,
+            lastMessage: lastMessage?.content || null,
+            lastMessageTime: lastMessage?.created_at || chat.created_at,
+            unreadCount: 0, // TODO: Implement unread count
+            isOnline: !chat.is_group, // For direct chats, we'll implement online status later
+          };
+        })
+      );
 
       // Sort by last message time
       formattedChats.sort((a, b) => {
