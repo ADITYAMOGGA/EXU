@@ -10,7 +10,7 @@ import { AddFriendsModal } from '@/components/AddFriendsModal';
 import { FriendRequestsModal } from '@/components/FriendRequestsModal';
 import { useFriendRequests } from '@/hooks/useFriendRequests';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Search, Edit, Settings, Users, Archive, LogOut, UserPlus, Bell, MoreVertical } from 'lucide-react';
+import { Search, Edit, Settings, Users, Archive, LogOut, UserPlus, Bell, MoreVertical, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLocation } from 'wouter';
 
@@ -26,7 +26,7 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
   const [showAddFriends, setShowAddFriends] = useState(false);
   const [showFriendRequests, setShowFriendRequests] = useState(false);
   const { user, signOut } = useAuth();
-  const { chats, loading } = useChats();
+  const { chats, loading, fetchChats } = useChats();
   const { pendingCount } = useFriendRequests();
   const [, setLocation] = useLocation();
 
@@ -92,8 +92,8 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
               <p className="text-xs text-white opacity-80">Online</p>
             </div>
           </div>
-          {/* Desktop Icons - Hidden on small screens but always shown in full screen */}
-          <div className="hidden sm:flex space-x-2">
+          {/* Desktop Icons - Always visible except on very small screens */}
+          <div className="flex space-x-2">
             <Button
               variant="ghost"
               size="sm"
@@ -127,6 +127,15 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
             >
               <Edit size={16} />
             </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full text-white"
+              onClick={fetchChats}
+              title="Refresh Chats"
+            >
+              <RefreshCw size={16} />
+            </Button>
             <ThemeToggle />
             <Button
               variant="ghost"
@@ -139,8 +148,8 @@ export function Sidebar({ selectedChatId, onChatSelect, onNewChat }: SidebarProp
             </Button>
           </div>
 
-          {/* Mobile Dropdown Menu - Shown on small screens */}
-          <div className="sm:hidden flex items-center space-x-2">
+          {/* Mobile Dropdown Menu - Hidden since we show buttons directly */}
+          <div className="hidden flex items-center space-x-2">
             <ThemeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

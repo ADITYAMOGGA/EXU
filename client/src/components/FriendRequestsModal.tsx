@@ -87,8 +87,11 @@ export function FriendRequestsModal({ isOpen, onClose }: FriendRequestsModalProp
         
         if (action === 'accept') {
           // Refresh the chat list to show the new chat
-          queryClient.invalidateQueries({ queryKey: ['/api/chats'] });
           console.log('Friend request accepted!');
+          // Add a small delay to allow the server to create the chat first
+          setTimeout(() => {
+            window.location.reload(); // Simple refresh to show new chats
+          }, 1000);
         }
       }
     } catch (error) {

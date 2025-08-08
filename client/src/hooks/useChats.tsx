@@ -30,6 +30,14 @@ export function useChats() {
         { event: '*', schema: 'public', table: 'messages' },
         () => fetchChats()
       )
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'chat_members' },
+        () => fetchChats()
+      )
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'chats' },
+        () => fetchChats()
+      )
       .subscribe();
 
     return () => {
@@ -55,7 +63,12 @@ export function useChats() {
         `)
         .eq('user_id', user.id);
 
-      if (chatMembersError) throw chatMembersError;
+      if (chatMembersError) {
+        console.error('Error fetching chat members:', chatMembersError);
+        throw chatMembersError;
+      }
+
+      console.log('Chat members data:', chatMembersData);
 
       if (!chatMembersData || chatMembersData.length === 0) {
         setChats([]);
